@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin:0;
+            padding:0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f4f7f6;
+        }
+        .container {
+            text-align: center;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .notification{
+            background-color: #f4f7f6;
+            padding: 10px;
+        }
+        button {
+            background-color: #6c5ce7;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            border:none;
+            cursor:pointer;
+            margin:10px;
+            font-size: 18px;
+            width: 80%;
+        }
+        @media (min-width: 576px){
+            button {
+                width: auto;
+            }
+        }
+  </style>
+  <script>
+    function randomString(length) {
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      let str = '';
+      for (let i = 0; i < length; i++) {
+        str += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return str;
+    }
+
+    function getRandomElement(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function loadDomains(callback) {
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+          var domains = request.responseText.split('\n').filter(line => line.trim() !== '');
+          callback(domains);
+        }
+      };
+      request.open("GET", "domains.txt", true);
+      request.send();
+    }
+
+    function navigate() {
+      loadDomains(function(domains) {
+        var randomStr = randomString(8);
+        var baseURL = 'http://lj.';
+        var remainingURL = '.' + getRandomElement(domains) + ':1661/dh';
+        var finalURL = baseURL + randomStr + remainingURL;
+        window.location = finalURL;
+      });
+    }
+
+    function clearCache() {
+      window.location.reload();
+    }
+  </script>
+</head>
+<body>
+    <div class="container">
+        <div class="notification">
+            <h2>如遇无法访问</h2>
+            <p>多点击几遍清理缓存重试，再不行联系上级。</p>
+        </div>
+        <button id="visit" onClick="navigate()">立即访问</button>
+        <button id="refresh" onClick="location.reload()">清理缓存</button>
+    </div>
+</body>
+</html>
